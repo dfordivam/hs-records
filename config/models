@@ -13,4 +13,62 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     deriving Eq
     deriving Show
 
+Physician
+    name Text
+    gender Gender
+    position Text
+    remarks Text Maybe
+
+Nurse
+    name Text
+    gender Gender
+    position Text
+    remarks Text Maybe
+
+Patient
+    name Text
+    gender Gender
+    phone Int Maybe
+    phone2 Int Maybe
+    email Text Maybe
+    address Text Maybe
+    remarks Text Maybe
+
+Appointment
+    patient PatientId
+    physician PhysicianId
+    nurse NurseId Maybe
+    diagnosis Text
+    comments Text
+    startTime UTCTime
+    endTime UTCTime Maybe
+
+Procedure
+    name Text
+    remarks Text Maybe
+    cost Int
+
+Admission
+    patient PatientId
+    active Bool
+    startTime UTCTime
+    endTime UTCTime Maybe
+    nurse NurseId
+    physician PhysicianId
+    room RoomId
+    procedures [Procedure]
+    diagnosis Text
+    comments Text
+
+Room
+    name Text
+    available Bool
+    beds Int
+    remarks Text Maybe
+
+PaymentDetails
+    patient PatientId
+    amount Int
+    time UTCTime
+    
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
