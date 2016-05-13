@@ -18,12 +18,14 @@ Physician
     gender Gender
     position Text
     remarks Text Maybe
+    deriving Show
 
 Nurse
     name Text
     gender Gender
     position Text
     remarks Text Maybe
+    deriving Show
 
 Patient
     name Text
@@ -33,6 +35,7 @@ Patient
     email Text Maybe
     address Text Maybe
     remarks Text Maybe
+    deriving Show
 
 Appointment
     patient PatientId
@@ -42,11 +45,13 @@ Appointment
     comments Text
     startTime UTCTime
     endTime UTCTime Maybe
+    deriving Show
 
 Procedure
     name Text
     remarks Text Maybe
     cost Int
+    deriving Show
 
 Admission
     patient PatientId
@@ -59,16 +64,19 @@ Admission
     procedures [Procedure]
     diagnosis Text
     comments Text
+    deriving Show
 
 Room
     name Text
     available Bool
     beds Int
     remarks Text Maybe
+    deriving Show
 
 PaymentDetails
     patient PatientId
     amount Int
     time UTCTime
+    deriving Show
     
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
