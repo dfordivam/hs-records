@@ -33,7 +33,9 @@ postAddPhysicianR = do
   ((result, widget), enctype) <- runFormPost physicianForm
 
   case result of
-    FormSuccess person -> defaultLayout [whamlet|<p>#{show person}|]
+    FormSuccess person -> do
+      _ <- runDB $ insertEntity person
+      defaultLayout [whamlet|<p>#{show person}|]
     _ -> defaultLayout
       [whamlet|
         <p>Invalid input, let's try again.
