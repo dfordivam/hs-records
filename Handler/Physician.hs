@@ -10,7 +10,7 @@ physicianForm = renderDivs $ Physician
   <$> areq textField "Name" Nothing
   <*> areq (selectField optionsEnum) "Gender" (Just Male)
   <*> areq textField "Position" Nothing
-  <*> aopt textField "Remarks" Nothing
+  <*> aopt textareaField "Remarks" Nothing
 
 getAddPhysicianR :: Handler Html
 getAddPhysicianR = do

@@ -17,7 +17,7 @@ Physician
     name Text
     gender Gender
     position Text
-    remarks Text Maybe
+    remarks Textarea Maybe
     deriving Eq
     deriving Show
 
@@ -25,7 +25,7 @@ Nurse
     name Text
     gender Gender
     position Text
-    remarks Text Maybe
+    remarks Textarea Maybe
     deriving Eq
     deriving Show
 
@@ -35,8 +35,8 @@ Patient
     phone Int Maybe
     phone2 Int Maybe
     email Text Maybe
-    address Text Maybe
-    remarks Text Maybe
+    address Textarea Maybe
+    remarks Textarea Maybe
     deriving Eq
     deriving Show
 
@@ -44,8 +44,8 @@ Appointment
     patient PatientId
     physician PhysicianId
     nurse NurseId Maybe
-    diagnosis Text
-    comments Text
+    diagnosis Textarea
+    comments Textarea
     startTime UTCTime
     endTime UTCTime Maybe
     deriving Eq
@@ -53,7 +53,7 @@ Appointment
 
 Procedure
     name Text
-    remarks Text Maybe
+    remarks Textarea Maybe
     cost Int
     deriving Eq
     deriving Show
@@ -67,8 +67,8 @@ Admission
     physician PhysicianId
     room RoomId
     procedures [Procedure]
-    diagnosis Text
-    comments Text
+    diagnosis Textarea
+    comments Textarea
     deriving Eq
     deriving Show
 
@@ -76,7 +76,7 @@ Room
     name Text
     available Bool
     beds Int
-    remarks Text Maybe
+    remarks Textarea Maybe
     deriving Eq
     deriving Show
 
