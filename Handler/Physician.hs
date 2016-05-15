@@ -1,9 +1,8 @@
-{-# LANGUAGE QuasiQuotes           #-}
-
 module Handler.Physician where
 
 import Import
 import CustomDBDataTypes
+import Handler.FormUtils
 
 physicianForm :: Form Physician
 physicianForm = renderDivs $ Physician
@@ -13,30 +12,7 @@ physicianForm = renderDivs $ Physician
   <*> aopt textareaField "Remarks" Nothing
 
 getAddPhysicianR :: Handler Html
-getAddPhysicianR = do
-  -- Generate the form to be displayed
-  (widget, enctype) <- generateFormPost physicianForm
-
-  defaultLayout
-    [whamlet|
-      <p>
-      <form method=post action=@{AddPhysicianR} enctype=#{enctype}>
-        ^{widget}
-        <button>Submit
-    |]
+getAddPhysicianR = getAddRecordForm physicianForm AddPhysicianR
 
 postAddPhysicianR :: Handler Html
-postAddPhysicianR = do
-  ((result, widget), enctype) <- runFormPost physicianForm
-
-  case result of
-    FormSuccess person -> do
-      _ <- runDB $ insertEntity person
-      defaultLayout [whamlet|<p>#{show person}|]
-    _ -> defaultLayout
-      [whamlet|
-        <p>Invalid input, please try again.
-        <form method=post action=@{AddPhysicianR} enctype=#{enctype}>
-          ^{widget}
-          <button>Submit
-        |]
+postAddPhysicianR = postAddRecordForm physicianForm AddPhysicianR
