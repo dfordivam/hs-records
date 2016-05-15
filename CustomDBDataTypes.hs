@@ -6,7 +6,7 @@ import ClassyPrelude.Yesod
 import Database.Persist.TH()
 
 data Gender = Female | Male
-  deriving (Show, Read, Eq)
+  deriving (Show, Read, Eq, Enum, Bounded)
 
 derivePersistField "Gender"
 

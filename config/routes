@@ -7,3 +7,4 @@
 / HomeR GET POST
 
 /comments CommentR POST
+/add/physician AddPhysicianR GET POST
