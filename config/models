@@ -18,6 +18,7 @@ Physician
     gender Gender
     position Text
     remarks Text Maybe
+    deriving Eq
     deriving Show
 
 Nurse
@@ -25,6 +26,7 @@ Nurse
     gender Gender
     position Text
     remarks Text Maybe
+    deriving Eq
     deriving Show
 
 Patient
@@ -35,6 +37,7 @@ Patient
     email Text Maybe
     address Text Maybe
     remarks Text Maybe
+    deriving Eq
     deriving Show
 
 Appointment
@@ -45,12 +48,14 @@ Appointment
     comments Text
     startTime UTCTime
     endTime UTCTime Maybe
+    deriving Eq
     deriving Show
 
 Procedure
     name Text
     remarks Text Maybe
     cost Int
+    deriving Eq
     deriving Show
 
 Admission
@@ -64,6 +69,7 @@ Admission
     procedures [Procedure]
     diagnosis Text
     comments Text
+    deriving Eq
     deriving Show
 
 Room
@@ -71,12 +77,14 @@ Room
     available Bool
     beds Int
     remarks Text Maybe
+    deriving Eq
     deriving Show
 
 PaymentDetails
     patient PatientId
     amount Int
     time UTCTime
+    deriving Eq
     deriving Show
     
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
