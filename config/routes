@@ -9,3 +9,4 @@
 /comments CommentR POST
 /add/physician AddPhysicianR GET POST
 /add/patient AddPatientR GET POST
+/add/appointment/#PatientId AddAppointmentR GET POST

@@ -25,6 +25,7 @@ library
                      Handler.Comment
                      Handler.Physician
                      Handler.Patient
+                     Handler.Appointment
                      Handler.FormUtils
                      CustomDBDataTypes
 
