@@ -16,3 +16,14 @@ getAddPhysicianR = getAddRecordForm physicianForm AddPhysicianR
 
 postAddPhysicianR :: Handler Html
 postAddPhysicianR = postAddRecordForm physicianForm AddPhysicianR
+
+getListPhysicianR :: Handler Html
+getListPhysicianR = do
+  dbData <- runDB $ selectList ([] :: [Filter Physician]) [LimitTo 10]
+
+  defaultLayout
+    [whamlet|
+      <ul>
+        $forall Entity physId physician <- dbData
+          <li>#{physicianName physician}
+    |]
