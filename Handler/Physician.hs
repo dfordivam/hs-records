@@ -27,3 +27,17 @@ getListPhysicianR = do
         $forall Entity physId physician <- dbData
           <li>#{physicianName physician}
     |]
+
+getListPhysicianPageR :: Integer -> Handler Html
+getPhysicianR :: PhysicianId -> Handler Html
+getPhysicianAppointmentsR :: PhysicianId -> Handler Html
+getPhysicianAdmissionsR :: PhysicianId -> Handler Html
+getEditPhysicianR :: PhysicianId -> Handler Html
+postEditPhysicianR :: PhysicianId -> Handler Html
+
+getListPhysicianPageR = undefined
+getPhysicianR = undefined
+getPhysicianAppointmentsR = undefined
+getPhysicianAdmissionsR = undefined
+getEditPhysicianR = undefined
+postEditPhysicianR = undefined

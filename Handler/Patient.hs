@@ -19,3 +19,19 @@ getAddPatientR = getAddRecordForm patientForm AddPatientR
 
 postAddPatientR :: Handler Html
 postAddPatientR = postAddRecordForm patientForm AddPatientR
+
+getListPatientR :: Handler Html
+getListPatientPageR :: Integer -> Handler Html
+getPatientR :: PatientId -> Handler Html
+getPatientAppointmentsR :: PatientId -> Handler Html
+getPatientAdmissionsR :: PatientId -> Handler Html
+getEditPatientR :: PatientId -> Handler Html
+postEditPatientR :: PatientId -> Handler Html
+
+getListPatientR = undefined
+getListPatientPageR = undefined
+getPatientR = undefined
+getPatientAppointmentsR = undefined
+getPatientAdmissionsR = undefined
+getEditPatientR = undefined
+postEditPatientR = undefined

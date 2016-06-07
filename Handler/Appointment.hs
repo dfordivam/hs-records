@@ -21,3 +21,19 @@ getAddAppointmentR patId = do
 
 postAddAppointmentR :: PatientId -> Handler Html
 postAddAppointmentR = undefined 
+
+getListAppointmentR :: Handler Html
+getListAppointmentPageR :: Integer -> Handler Html
+getListUpcomingAppointmentR :: Handler Html
+getListUpcomingAppointmentPageR :: Integer -> Handler Html
+getAppointmentR :: AppointmentId -> Handler Html
+getEditAppointmentR :: AppointmentId -> Handler Html
+postEditAppointmentR :: AppointmentId -> Handler Html
+
+getListAppointmentR = undefined
+getListAppointmentPageR = undefined
+getListUpcomingAppointmentR = undefined
+getListUpcomingAppointmentPageR = undefined
+getAppointmentR = undefined
+getEditAppointmentR = undefined
+postEditAppointmentR = undefined

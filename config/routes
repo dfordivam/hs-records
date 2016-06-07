@@ -7,8 +7,55 @@
 / HomeR GET POST
 
 /comments CommentR POST
+
+--
+-- Physician
 /add/physician AddPhysicianR GET POST
+
+--
+/list/physicians ListPhysicianR GET
+/list/physicians/page/#Integer ListPhysicianPageR GET
+
+--
+/physician/#PhysicianId PhysicianR GET
+/physician/#PhysicianId/appointments PhysicianAppointmentsR GET
+/physician/#PhysicianId/admissions PhysicianAdmissionsR GET
+
+/edit/physician/#PhysicianId EditPhysicianR GET POST
+
+-- Patient
 /add/patient AddPatientR GET POST
+
+/list/patients ListPatientR GET
+/list/patients/page/#Integer ListPatientPageR GET
+
+/patient/#PatientId PatientR GET
+/patient/#PatientId/appointments PatientAppointmentsR GET
+/patient/#PatientId/admissions PatientAdmissionsR GET
+
+/edit/patient/#PatientId EditPatientR GET POST
+
+-- Nurse
+-- /add/nurse AddNurseR GET POST
+-- 
+-- /list/nurses ListNurseR GET
+-- /list/nurses/page/#Integer ListNursePageR GET
+-- 
+-- /nurse/#NurseId NurseR GET
+-- /nurse/#NurseId/appointments NurseAppointmentsR GET
+-- /nurse/#NurseId/admissions NurseAdmissionsR GET
+-- 
+-- /edit/nurse/#NurseId EditNurseR GET POST
+
+-- Appointment
 /add/appointment/#PatientId AddAppointmentR GET POST
 
-/list/physician ListPhysicianR GET
+/list/appointments ListAppointmentR GET
+/list/appointments/page/#Integer ListAppointmentPageR GET
+
+/list/appointments/upcoming ListUpcomingAppointmentR GET
+/list/appointments/upcoming/page/#Integer ListUpcomingAppointmentPageR GET
+
+/appointment/#AppointmentId AppointmentR GET
+
+/edit/appointment/#AppointmentId EditAppointmentR GET POST
