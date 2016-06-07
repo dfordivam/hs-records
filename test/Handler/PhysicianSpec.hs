@@ -36,25 +36,24 @@ spec = withApp $ do
     addPhysicians 25
 
     get ListPhysicianR
+    followRedirect
     statusIs 200
-
-    printBody
 
     -- Has 10 in this page
     bodyContains "Phys_1"
     bodyContains "Phys_10"
 
-    -- Has link to 
-    -- Has a link to add new physician
     bodyContains "Add new physician"
 
     get $ ListPhysicianPageR 2
     statusIs 200
-    bodyContains "Phys_11"
     bodyContains "Phys_20"
+
+    bodyContains "Add new physician"
 
   it "displays a message when no physicians are present in database" $ do
     get ListPhysicianR
+    followRedirect
     statusIs 200
 
     -- Has a link to add new physician
