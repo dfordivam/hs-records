@@ -51,6 +51,37 @@ spec = withApp $ do
 
     bodyContains "Add new physician"
 
+  it "edit the record" $ do
+    Just (Entity objId obj) <- runDB $ selectFirst ([] :: [Filter Physician]) []
+
+    get $ EditPhysicianR objId
+    statusIs 200
+
+    let oldName = physicianName obj
+        oldRemarks = physicianRemarks obj
+
+    bodyContains (unpack oldName)
+
+    let newName = oldName ++ "_newname"
+        newRemarks = "some new remark" :: Text
+
+    request $ do
+      setMethod "POST"
+      setUrl $ EditPhysicianR objId
+      addToken
+
+      byLabel "Name" newName
+      byLabel "Gender" "1"
+      byLabel "Position" (physicianPosition obj)
+      byLabel "Remarks" newRemarks
+
+    Just (Entity _ newObj) <- runDB $  selectFirst ([] :: [Filter Physician]) []
+    --getBy $ objId
+
+    assertEqual "Name should be" (physicianName newObj) (newName)
+    assertEqual "Position should be" (physicianPosition newObj) (physicianPosition obj)
+    -- assertEqual "Remarks should be" (physicianRemarks newObj) (Just newRemarks)
+
   it "displays a message when no physicians are present in database" $ do
     get ListPhysicianR
     followRedirect

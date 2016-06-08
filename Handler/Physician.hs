@@ -4,18 +4,18 @@ import Import
 import CustomDBDataTypes
 import Handler.FormUtils
 
-physicianForm :: Form Physician
-physicianForm = renderDivs $ Physician
-  <$> areq textField "Name" Nothing
-  <*> areq (selectField optionsEnum) "Gender" (Just Male)
-  <*> areq textField "Position" Nothing
-  <*> aopt textareaField "Remarks" Nothing
+physicianForm :: Maybe Physician -> Form Physician
+physicianForm inp = renderDivs $ Physician
+  <$> areq textField "Name" (physicianName <$> inp)
+  <*> areq (selectField optionsEnum) "Gender" (physicianGender <$> inp)
+  <*> areq textField "Position" (physicianPosition <$> inp)
+  <*> aopt textareaField "Remarks" (physicianRemarks <$> inp)
 
 getAddPhysicianR :: Handler Html
-getAddPhysicianR = getAddRecordForm physicianForm AddPhysicianR
+getAddPhysicianR = getAddRecordForm (physicianForm Nothing) AddPhysicianR
 
 postAddPhysicianR :: Handler Html
-postAddPhysicianR = postAddRecordForm physicianForm AddPhysicianR
+postAddPhysicianR = postAddRecordForm Nothing (physicianForm Nothing) AddPhysicianR
 
 perPage = 10
 
@@ -34,19 +34,26 @@ getListPhysicianPageR pageNumber = do
       <ul>
         $forall Entity physId physician <- dbData
           <li>#{physicianName physician}
+          <li>
+            <a href=@{EditPhysicianR physId}>edit
       <div>
         <p>
           <a href=@{AddPhysicianR}>Add new physician
     |]
 
+getEditPhysicianR :: PhysicianId -> Handler Html
+getEditPhysicianR idVal = do
+  val <- runDB $ get $ idVal
+  getAddRecordForm (physicianForm val) (EditPhysicianR idVal)
+
+postEditPhysicianR :: PhysicianId -> Handler Html
+postEditPhysicianR idVal = 
+  postAddRecordForm (Just idVal) (physicianForm Nothing) (EditPhysicianR idVal)
+
 getPhysicianR :: PhysicianId -> Handler Html
 getPhysicianAppointmentsR :: PhysicianId -> Handler Html
 getPhysicianAdmissionsR :: PhysicianId -> Handler Html
-getEditPhysicianR :: PhysicianId -> Handler Html
-postEditPhysicianR :: PhysicianId -> Handler Html
 
 getPhysicianR = undefined
 getPhysicianAppointmentsR = undefined
 getPhysicianAdmissionsR = undefined
-getEditPhysicianR = undefined
-postEditPhysicianR = undefined

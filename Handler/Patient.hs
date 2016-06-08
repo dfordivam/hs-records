@@ -18,7 +18,7 @@ getAddPatientR :: Handler Html
 getAddPatientR = getAddRecordForm patientForm AddPatientR
 
 postAddPatientR :: Handler Html
-postAddPatientR = postAddRecordForm patientForm AddPatientR
+postAddPatientR = postAddRecordForm Nothing patientForm AddPatientR
 
 getListPatientR :: Handler Html
 getListPatientPageR :: Integer -> Handler Html

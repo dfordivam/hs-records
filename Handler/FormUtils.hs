@@ -16,12 +16,14 @@ getAddRecordForm form addRoute = do
         <button>Submit
     |]
 
-postAddRecordForm form addRoute = do
+postAddRecordForm maybeId form addRoute = do
   ((result, widget), enctype) <- runFormPost form
 
   case result of
     FormSuccess obj -> do
-      _ <- runDB $ insertEntity obj
+      case maybeId of
+        Nothing -> runDB $ insertEntity obj >> return ()
+        Just objId -> runDB $ replace objId obj
       defaultLayout [whamlet|<p>#{show obj}|]
     _ -> defaultLayout
       [whamlet|
