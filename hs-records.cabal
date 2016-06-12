@@ -105,6 +105,14 @@ test-suite test
     main-is:           Spec.hs
     hs-source-dirs:    test
     ghc-options:       -Wall
+    other-modules : Handler.TestUtils
+                    Handler.AppointmentSpec
+                    Handler.CommentSpec
+                    Handler.CommonSpec
+                    Handler.HomeSpec
+                    Handler.PatientSpec
+                    Handler.PhysicianSpec
+                    TestImport
 
     extensions: TemplateHaskell
                 QuasiQuotes

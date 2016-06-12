@@ -2,6 +2,7 @@ module Handler.PhysicianSpec (spec) where
 
 import TestImport
 import CustomDBDataTypes
+import Handler.TestUtils
 
 spec :: Spec
 spec = withApp $ do
@@ -28,7 +29,7 @@ spec = withApp $ do
     -- printBody
     statusIs 200
 
-    (Entity _id obj:_) <- runDB $ selectList [PhysicianName ==. name] []
+    (Entity _ obj:_) <- runDB $ selectList [PhysicianName ==. name] []
     assertEqual "Should have " obj (Physician name gender title Nothing)
 
   it "displays a list of physicians which has link to detail page" $ do
@@ -94,15 +95,3 @@ spec = withApp $ do
   --   get ListPhysicianR
   --   statusIs 200
 
-addPhysicians countN = do
-  unless (countN < 2) $ addPhysicians (countN - 1)
-
-  let physician = Physician name gender position remarks
-      name = pack $ "Phys_" ++ (show countN)
-      gender = if even countN then Male else Female
-      position = pack $ "Pos_" ++ (show countN)
-      remarks = Nothing
-      -- Just $ Textarea $ pack $ "Remarks for Phys_" ++ (show count)
-
-  runDB $ insert physician
-  return ()
