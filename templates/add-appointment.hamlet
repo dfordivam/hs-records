@@ -1,0 +1,6 @@
+<p>
+<form method=post action=@{addRoute} enctype=#{enctype}>
+  ^{widget}
+  <input type="datetime-local" name=#{appointmentStartTimeFormTag} >
+  <button>Submit
+  <p>
