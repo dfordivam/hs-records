@@ -35,6 +35,8 @@
 
 /edit/patient/#PatientId EditPatientR GET POST
 
+/search/patient PatientSearchR GET
+
 -- Nurse
 -- /add/nurse AddNurseR GET POST
 -- 
