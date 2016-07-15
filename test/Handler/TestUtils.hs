@@ -6,7 +6,7 @@ import CustomDBDataTypes
 addPhysicians countN = do
   unless (countN < 2) $ addPhysicians (countN - 1)
 
-  let physician = Physician name gender position remarks
+  let physician = Physician name gender position remarks True
       name = pack $ "Phys_" ++ (show countN)
       gender = if even countN then Male else Female
       position = pack $ "Pos_" ++ (show countN)

@@ -4,6 +4,7 @@ User
     password Text Maybe -- Password may not be set yet
     verkey Text Maybe   -- Used for resetting passwords
     verified Bool
+    active Bool
     UniqueUser email
     deriving Typeable
 
@@ -18,6 +19,7 @@ Physician
     gender Gender
     position Text
     remarks Textarea Maybe
+    active Bool
     deriving Eq
     deriving Show
 
@@ -26,6 +28,7 @@ Nurse
     gender Gender
     position Text
     remarks Textarea Maybe
+    active Bool
     deriving Eq
     deriving Show
 

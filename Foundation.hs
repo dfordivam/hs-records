@@ -163,7 +163,7 @@ instance YesodAuthEmail App where
     afterPasswordRoute _ = HomeR
 
     addUnverified email verkey =
-        runDB $ insert $ User Nothing email Nothing (Just verkey) False
+        runDB $ insert $ User Nothing email Nothing (Just verkey) False True
 
     sendVerifyEmail _ _ verurl = do
         -- Print out to the console the verification email, for easier

@@ -25,12 +25,13 @@ spec = withApp $ do
       byLabel "Name" name
       byLabel "Gender" "1"
       byLabel "Position" title
+      byLabel "Active" "1"
 
     -- printBody
     statusIs 200
 
     (Entity _ obj:_) <- runDB $ selectList [PhysicianName ==. name] []
-    assertEqual "Should have " obj (Physician name gender title Nothing)
+    assertEqual "Should have " obj (Physician name gender title Nothing False)
 
   it "displays a list of physicians which has link to detail page" $ do
     runDB $ deleteWhere ([] :: [Filter Physician])
@@ -75,6 +76,9 @@ spec = withApp $ do
       byLabel "Gender" "1"
       byLabel "Position" (physicianPosition obj)
       byLabel "Remarks" newRemarks
+      byLabel "Active" "1"
+
+    statusIs 200
 
     Just (Entity _ newObj) <- runDB $  selectFirst ([] :: [Filter Physician]) []
     --getBy $ objId

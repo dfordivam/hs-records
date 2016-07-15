@@ -10,6 +10,7 @@ physicianForm inp = renderDivs $ Physician
   <*> areq (selectField optionsEnum) "Gender" (physicianGender <$> inp)
   <*> areq textField "Position" (physicianPosition <$> inp)
   <*> aopt textareaField "Remarks" (physicianRemarks <$> inp)
+  <*> areq (selectField optionsEnum) "Active" (physicianActive <$> inp)
 
 getAddPhysicianR :: Handler Html
 getAddPhysicianR = getAddRecordForm (physicianForm Nothing) AddPhysicianR
@@ -47,7 +48,7 @@ getEditPhysicianR idVal = do
   getAddRecordForm (physicianForm val) (EditPhysicianR idVal)
 
 postEditPhysicianR :: PhysicianId -> Handler Html
-postEditPhysicianR idVal = 
+postEditPhysicianR idVal =
   postAddRecordForm (Just idVal) (physicianForm Nothing) (EditPhysicianR idVal)
 
 getPhysicianR :: PhysicianId -> Handler Html
