@@ -77,7 +77,7 @@ getListPatientPageR pageNumber = do
           <li>#{patientName patData}
       <div>
         <p>
-          <a href=@{AddPatientR}>Add new patient data
+          <a href=@{AddPatientR}>Add new patient record
     |]
 
 getPatientSearchR :: Handler Html

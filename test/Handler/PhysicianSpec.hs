@@ -47,6 +47,7 @@ spec = withApp $ do
 
     bodyContains "Add new physician"
 
+    -- Check 2nd page
     get $ ListPhysicianPageR 2
     statusIs 200
     bodyContains "Phys_20"
