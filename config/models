@@ -26,7 +26,7 @@ Physician
 Nurse
     name Text
     gender Gender
-    position Text
+    position Text Maybe
     remarks Textarea Maybe
     active Bool
     deriving Eq

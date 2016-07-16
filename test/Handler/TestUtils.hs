@@ -16,6 +16,19 @@ addPhysicians countN = do
   runDB $ insert physician
   return ()
 
+addNurses countN = do
+  unless (countN < 2) $ addNurses (countN - 1)
+
+  let nurse = Nurse name gender position remarks True
+      name = pack $ "Nurse_" ++ (show countN)
+      gender = if even countN then Male else Female
+      position = Just $ pack $ "Pos_" ++ (show countN)
+      remarks = Nothing
+      -- Just $ Textarea $ pack $ "Remarks for Phys_" ++ (show count)
+
+  runDB $ insert nurse 
+  return ()
+
 addPatients countN = do
   unless (countN < 2) $ addPatients (countN - 1)
 

@@ -26,6 +26,7 @@ library
                      Handler.Physician
                      Handler.Patient
                      Handler.Appointment
+                     Handler.Nurse
                      Handler.FormUtils
                      CustomDBDataTypes
 

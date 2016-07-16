@@ -38,16 +38,16 @@
 /search/patient PatientSearchR GET
 
 -- Nurse
--- /add/nurse AddNurseR GET POST
--- 
--- /list/nurses ListNurseR GET
--- /list/nurses/page/#Integer ListNursePageR GET
--- 
--- /nurse/#NurseId NurseR GET
--- /nurse/#NurseId/appointments NurseAppointmentsR GET
--- /nurse/#NurseId/admissions NurseAdmissionsR GET
--- 
--- /edit/nurse/#NurseId EditNurseR GET POST
+/add/nurse AddNurseR GET POST
+
+/list/nurses ListNurseR GET
+/list/nurses/page/#Integer ListNursePageR GET
+
+/nurse/#NurseId NurseR GET
+/nurse/#NurseId/appointments NurseAppointmentsR GET
+/nurse/#NurseId/admissions NurseAdmissionsR GET
+
+/edit/nurse/#NurseId EditNurseR GET POST
 
 -- Appointment
 /add/appointment/#PatientId AddAppointmentR GET POST
