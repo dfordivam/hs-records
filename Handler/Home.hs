@@ -17,7 +17,6 @@ getHomeR = do
     (formWidget, formEnctype) <- generateFormPost sampleForm
     let submission = Nothing :: Maybe (FileInfo, Text)
         handlerName = "getHomeR" :: Text
-    maid <- maybeAuthId
     defaultLayout $ do
         let (commentFormId, commentTextareaId, commentListId) = commentIds
         aDomId <- newIdent
@@ -32,7 +31,6 @@ postHomeR = do
             FormSuccess res -> Just res
             _ -> Nothing
 
-    maid <- maybeAuthId
     defaultLayout $ do
         let (commentFormId, commentTextareaId, commentListId) = commentIds
         aDomId <- newIdent

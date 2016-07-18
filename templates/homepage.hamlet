@@ -30,15 +30,6 @@
     A Widget's Html, Css and Javascript are separated in three files with the
     <tt>.hamlet</tt>, <tt>.lucius</tt> and <tt>.julius</tt> extensions.
 
-  <span .list-group-item>
-    <p> Your current auth ID: #{show maid}
-    $maybe _ <- maid
-      <p>
-        <a href=@{AuthR LogoutR}>Logout
-    $nothing
-      <p>
-        <a href=@{AuthR LoginR}>Go to the login page
-
   <span .list-group-item ##{aDomId}>
     If you had javascript enabled then you wouldn't be seeing this.
 
