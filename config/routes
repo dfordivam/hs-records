@@ -5,8 +5,6 @@
 
 / HomeR GET POST
 
-/comments CommentR POST
-
 --
 -- Physician
 /add/physician AddPhysicianR GET POST

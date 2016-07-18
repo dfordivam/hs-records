@@ -8,12 +8,6 @@ User
     UniqueUser email
     deriving Typeable
 
-Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived.
-    message Text
-    userId UserId Maybe
-    deriving Eq
-    deriving Show
-
 Physician
     name Text
     gender Gender
