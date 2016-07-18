@@ -72,9 +72,12 @@ getListPatientPageR pageNumber = do
 
   defaultLayout
     [whamlet|
-      <ul>
+      <table>
         $forall Entity patId patData <- dbData
-          <li>#{patientName patData}
+          <tr>
+            <td>#{patientName patData}
+            <td><a href=@{EditPatientR patId}>edit
+            <td><a href=@{AddAppointmentR patId}>appointment
       <div>
         <p>
           <a href=@{AddPatientR}>Add new patient record
