@@ -89,6 +89,7 @@ library
                  , time
                  , case-insensitive
                  , wai
+                 , yesod-auth-account
 
 executable         hs-records
     if flag(library-only)

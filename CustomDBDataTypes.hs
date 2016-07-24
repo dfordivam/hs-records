@@ -10,3 +10,7 @@ data Gender = Female | Male
 
 derivePersistField "Gender"
 
+data AuthorisationLevel = AdminAccess | FullAccess | RestrictedAccess
+  deriving (Show, Read, Eq, Enum, Bounded)
+
+derivePersistField "AuthorisationLevel"

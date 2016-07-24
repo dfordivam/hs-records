@@ -10,6 +10,11 @@ import qualified Yesod.Core.Unsafe as Unsafe
 import qualified Data.CaseInsensitive as CI
 import qualified Data.Text.Encoding as TE
 
+import Yesod.Auth
+import Yesod.Auth.Account
+
+import CustomDBDataTypes
+
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
@@ -79,14 +84,15 @@ instance Yesod App where
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
     -- The page to be redirected to when authentication is required.
-    authRoute _ = Nothing
+    authRoute _ = Just $ AuthR LoginR
 
     -- Routes not requiring authentication.
-    -- isAuthorized (AuthR _) _ = return Authorized
+    isAuthorized (AuthR _) _ = return Authorized
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
-    -- Default to Authorized for now.
-    isAuthorized _ _ = return Authorized
+
+    isAuthorized AddPhysicianR _ = checkAuthorized FullAccess
+    isAuthorized _ _ = checkAuthorized RestrictedAccess
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
@@ -143,7 +149,67 @@ unsafeHandler = Unsafe.fakeHandlerGetLogger appLogger
 -- Note: Some functionality previously present in the scaffolding has been
 -- moved to documentation in the Wiki. Following are some hopefully helpful
 -- links:
---
+
 -- https://github.com/yesodweb/yesod/wiki/Sending-email
 -- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
 -- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
+
+instance YesodAuth App where
+    type AuthId App = Username
+    getAuthId = return . Just . credsIdent
+    loginDest _ = HomeR
+    logoutDest _ = HomeR
+    authPlugins _ = [accountPlugin]
+    authHttpManager _ = error "No manager needed"
+    onLogin = return ()
+    maybeAuthId = lookupSession credsKey
+
+-- Authentication code (added from yesod-auth-account example.hs)
+
+instance PersistUserCredentials User where
+    userUsernameF = UserUsername
+    userPasswordHashF = UserPassword
+    userEmailF = UserEmail
+    userEmailVerifiedF = UserVerified
+    userEmailVerifyKeyF = UserVerifyKey
+    userResetPwdKeyF = UserResetPasswordKey
+    uniqueUsername = UniqueUsername
+
+    userCreate name email key pwd =
+       User name email pwd key "" False True RestrictedAccess
+
+instance AccountSendEmail App where
+  sendVerifyEmail u _ link =
+    liftIO $ putStrLn ("Link for user " ++ u ++ " is :" ++ link)
+
+  sendNewPasswordEmail u _ link =
+    liftIO $ putStrLn ("Link for user " ++ u ++ " is :" ++ link)
+
+instance YesodAuthAccount (AccountPersistDB App User) App where
+    runAccountDB = runAccountPersistDB
+
+checkAuthorized :: AuthorisationLevel -> Handler AuthResult
+checkAuthorized auth = do
+  mu <- maybeAuthId
+  case mu of
+    Nothing -> return AuthenticationRequired
+    Just uname -> do
+      Just (Entity _ obj) <- runDB $ selectFirst [UserUsername ==. uname] []
+      let authLvl = userAuthLevel obj
+      if isAuthorised auth authLvl
+        then return Authorized
+        else return $ Unauthorized "Not Authorized"
+
+isAuthorised :: AuthorisationLevel -> AuthorisationLevel -> Bool
+isAuthorised required have =
+  case required of
+    AdminAccess ->
+      case have of
+        AdminAccess -> True
+        _           -> False
+    FullAccess ->
+      case have of
+        RestrictedAccess -> False
+        _                -> True
+    _ -> True
+

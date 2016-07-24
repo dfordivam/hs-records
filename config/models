@@ -1,11 +1,13 @@
 User
-    ident Text Maybe    -- Name of user
-    email Text          -- Email id, used for login
-    password Text Maybe -- Password may not be set yet
-    verkey Text Maybe   -- Used for resetting passwords
+    username Text       -- Name of user, Used for login
+    UniqueUsername username
+    email Text          -- Email id
+    password ByteString -- Password may not be set yet
+    verifyKey Text      --
+    resetPasswordKey Text
     verified Bool
-    active Bool
-    UniqueUser email
+    active Bool         -- Inactive user may not be alowed to login
+    authLevel AuthorisationLevel
     deriving Typeable
 
 Physician
@@ -83,5 +85,5 @@ PaymentDetails
     time UTCTime
     deriving Eq
     deriving Show
-    
+
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
