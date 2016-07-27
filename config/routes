@@ -6,6 +6,10 @@
 / HomeR GET POST
 /auth AuthR Auth getAuth
 
+-- App User configurable settings
+/settings SettingsR GET
+/settings/add_admin SettingsAddAdminR GET
+
 --
 -- Physician
 /add/physician AddPhysicianR GET POST

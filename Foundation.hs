@@ -92,6 +92,8 @@ instance Yesod App where
     isAuthorized RobotsR _ = return Authorized
 
     isAuthorized AddPhysicianR _ = checkAuthorized FullAccess
+    isAuthorized SettingsR _ = checkSettingsAuthorized
+    isAuthorized SettingsAddAdminR _ = checkSettingsAuthorized
     isAuthorized _ _ = checkAuthorized RestrictedAccess
 
     -- This function creates static content files in the static folder
@@ -187,6 +189,18 @@ instance AccountSendEmail App where
 
 instance YesodAuthAccount (AccountPersistDB App User) App where
     runAccountDB = runAccountPersistDB
+
+adminUserName = "admin"
+adminUserPassword = "admin"
+
+-- If the user admin is not present then allow anyone
+-- Else only allow admin users
+checkSettingsAuthorized :: Handler AuthResult
+checkSettingsAuthorized = do
+  maybeUser <- runAccountPersistDB $ loadUser adminUserName
+  case maybeUser of
+    Just _ -> checkAuthorized AdminAccess
+    Nothing -> return Authorized
 
 checkAuthorized :: AuthorisationLevel -> Handler AuthResult
 checkAuthorized auth = do
