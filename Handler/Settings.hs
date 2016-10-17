@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 module Handler.Settings where
 
 import Import
@@ -17,8 +18,19 @@ getSettingsAddAdminR = do
     Nothing -> do
       pass <- hashPassword adminUserPassword
       Entity userId _ <- runAccountDB $ do
-        Right user <- addNewUser adminUserName "" "" pass
+        Right user <- addNewUser adminUserName "" "" pass -- Point of failure
         verifyAccount user
         return user
       runDB $ update userId [UserAuthLevel =. AdminAccess]
       redirect SettingsR
+
+getSettingsVerifyUserR :: Text -> Handler Html
+getSettingsVerifyUserR userName = do
+  access <- lookupGetParam "access" >>=
+            \case
+              Nothing -> return RestrictedAccess
+              Just _ -> return FullAccess
+  runAccountDB $ loadUser userName >>= mapM verifyAccount
+  runDB $ selectFirst [UserUsername ==. userName] [] >>= 
+    mapM (\(Entity uid _) -> update uid [UserAuthLevel =. access])
+  redirect SettingsR

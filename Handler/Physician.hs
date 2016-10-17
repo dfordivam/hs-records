@@ -1,7 +1,7 @@
+{-# LANGUAGE RankNTypes #-}
 module Handler.Physician where
 
 import Import
-import CustomDBDataTypes
 import Handler.FormUtils
 
 physicianForm :: Maybe Physician -> Form Physician
@@ -18,6 +18,7 @@ getAddPhysicianR = getAddRecordForm (physicianForm Nothing) AddPhysicianR
 postAddPhysicianR :: Handler Html
 postAddPhysicianR = postAddRecordForm Nothing (physicianForm Nothing) AddPhysicianR
 
+perPage :: forall a. Num a => a
 perPage = 10
 
 getListPhysicianR :: Handler Html

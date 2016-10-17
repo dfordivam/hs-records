@@ -9,6 +9,12 @@ spec = withApp $ do
   it "loads a form to add a new nurse" $ do
     runDB $ deleteWhere ([] :: [Filter Nurse])
 
+    withFullUserLogin ( do
+    get AddNurseR
+    statusIs 403
+    )
+
+    withAdminLogin ( do
     get AddNurseR
     statusIs 200
     -- htmlAllContain "h1" "Add new nurse information"
@@ -32,11 +38,18 @@ spec = withApp $ do
 
     (Entity _ obj:_) <- runDB $ selectList [NurseName ==. name] []
     assertEqual "Should have " obj (Nurse name gender (Just title) Nothing False)
+    )
 
   it "displays a list of nurses which has link to detail page" $ do
     runDB $ deleteWhere ([] :: [Filter Nurse])
     addNurses 25
 
+    withRestrictedUserLogin ( do
+    get ListNurseR
+    statusIs 403
+    )
+
+    withFullUserLogin ( do
     get ListNurseR
     followRedirect
     statusIs 200
@@ -53,10 +66,17 @@ spec = withApp $ do
     bodyContains "Nurse_20"
 
     bodyContains "Add new nurse"
+    )
 
   it "edit the record" $ do
     Just (Entity objId obj) <- runDB $ selectFirst ([] :: [Filter Nurse]) []
 
+    withFullUserLogin ( do
+    get $ EditNurseR objId
+    statusIs 403
+    )
+
+    withAdminLogin ( do
     get $ EditNurseR objId
     statusIs 200
 
@@ -88,6 +108,7 @@ spec = withApp $ do
     assertEqual "Name should be" (nurseName newObj) (newName)
     assertEqual "Position should be" (nursePosition newObj) (nursePosition obj)
     -- assertEqual "Remarks should be" (nurseRemarks newObj) (Just newRemarks)
+    )
 
   it "displays a message when no nurses are present in database" $ do
     get ListNurseR

@@ -110,7 +110,6 @@ test-suite test
     other-modules : Handler.TestUtils
                     Handler.AppointmentSpec
                     Handler.CommonSpec
-                    Handler.HomeSpec
                     Handler.PatientSpec
                     Handler.PhysicianSpec
                     Handler.SettingsSpec
@@ -150,3 +149,4 @@ test-suite test
                  , mongoDB
                  , monad-control
                  , aeson
+                 , yesod-auth-account

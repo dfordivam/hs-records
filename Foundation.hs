@@ -91,9 +91,24 @@ instance Yesod App where
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
 
-    isAuthorized AddPhysicianR _ = checkAuthorized FullAccess
+    -- Admin
+    isAuthorized (SettingsVerifyUserR _) _ = checkAuthorized AdminAccess
+    isAuthorized AddPhysicianR _ = checkAuthorized AdminAccess
+    isAuthorized (EditPhysicianR _) _ = checkAuthorized AdminAccess
+    isAuthorized AddNurseR _     = checkAuthorized AdminAccess
+    isAuthorized (EditNurseR _) _     = checkAuthorized AdminAccess
+
+    -- Full
+    isAuthorized ListPhysicianR _ = checkAuthorized FullAccess
+    isAuthorized (ListPhysicianPageR _) _ = checkAuthorized FullAccess
+    isAuthorized ListNurseR _ = checkAuthorized FullAccess
+    isAuthorized (ListNursePageR _) _ = checkAuthorized FullAccess
+
+    -- Special
     isAuthorized SettingsR _ = checkSettingsAuthorized
     isAuthorized SettingsAddAdminR _ = checkSettingsAuthorized
+
+    -- Restricted (everything else)
     isAuthorized _ _ = checkAuthorized RestrictedAccess
 
     -- This function creates static content files in the static folder

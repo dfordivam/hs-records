@@ -6,9 +6,15 @@ import Handler.TestUtils
 
 spec :: Spec
 spec = withApp $ do
-  it "loads a form to add a new physician" $ do
+  it "add a new physician" $ do
     runDB $ deleteWhere ([] :: [Filter Physician])
 
+    withFullUserLogin ( do
+    get AddPhysicianR
+    statusIs 403
+    )
+
+    withAdminLogin ( do
     get AddPhysicianR
     statusIs 200
     -- htmlAllContain "h1" "Add new physician information"
@@ -32,11 +38,19 @@ spec = withApp $ do
 
     (Entity _ obj:_) <- runDB $ selectList [PhysicianName ==. name] []
     assertEqual "Should have " obj (Physician name gender title Nothing False)
+    )
 
   it "displays a list of physicians which has link to detail page" $ do
     runDB $ deleteWhere ([] :: [Filter Physician])
     addPhysicians 25
 
+    withRestrictedUserLogin ( do
+    get ListPhysicianR
+    statusIs 403
+    )
+    -- This require Full priviledges
+
+    withFullUserLogin ( do
     get ListPhysicianR
     followRedirect
     statusIs 200
@@ -53,10 +67,17 @@ spec = withApp $ do
     bodyContains "Phys_20"
 
     bodyContains "Add new physician"
+    )
 
   it "edit the record" $ do
     Just (Entity objId obj) <- runDB $ selectFirst ([] :: [Filter Physician]) []
 
+    withFullUserLogin ( do
+    get $ EditPhysicianR objId
+    statusIs 403
+    )
+
+    withAdminLogin ( do
     get $ EditPhysicianR objId
     statusIs 200
 
@@ -87,13 +108,14 @@ spec = withApp $ do
     assertEqual "Name should be" (physicianName newObj) (newName)
     assertEqual "Position should be" (physicianPosition newObj) (physicianPosition obj)
     -- assertEqual "Remarks should be" (physicianRemarks newObj) (Just newRemarks)
+    )
 
-  it "displays a message when no physicians are present in database" $ do
-    get ListPhysicianR
-    followRedirect
-    statusIs 200
+  -- it "displays a message when no physicians are present in database" $ do
+  --   get ListPhysicianR
+  --   followRedirect
+  --   statusIs 200
 
-    -- Has a link to add new physician
+  --   -- Has a link to add new physician
     --
   -- it "details page shows physician details, list of upcoming appointments\
   --   \ past appointments, link to edit details" $ do

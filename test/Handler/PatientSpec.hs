@@ -8,6 +8,10 @@ spec :: Spec
 spec = withApp $ do
   it "loads a form to add a new patient record" $ do
     get AddPatientR
+    statusIs 303
+
+    withRestrictedUserLogin ( do
+    get AddPatientR
     statusIs 200
     -- htmlAllContain "h1" "Add new physician information"
 
@@ -28,11 +32,13 @@ spec = withApp $ do
     (Entity _id obj:_) <- runDB $ selectList [PatientName ==. name] []
     assertEqual "Should have " obj 
       (Patient name gender Nothing Nothing Nothing Nothing Nothing)
+    )
 
   it "get list of patients" $ do
     runDB $ deleteWhere ([] :: [Filter Patient])
     addPatients 25
 
+    withRestrictedUserLogin ( do
     get ListPatientR
     followRedirect
     statusIs 200
@@ -52,6 +58,7 @@ spec = withApp $ do
     bodyContains "Pat_9"
 
     bodyContains "Add new patient record"
+    )
 
   -- it "edit the record" $ do
   --
@@ -63,6 +70,7 @@ spec = withApp $ do
 
     -- Do Lookup
     -- Valid name lookup should return the list of names
+    withRestrictedUserLogin ( do
     get (PatientSearchR , [("name", "pat")])
     statusIs 200
 
@@ -99,3 +107,4 @@ spec = withApp $ do
     statusIs 200
 
     htmlNoneContain "li" "Pat"
+    )

@@ -7,13 +7,21 @@ import Handler.TestUtils
 spec :: Spec
 spec = withApp $ do
   it "loads a form to add a new appointment" $ do
+    -- Init
     runDB $ deleteWhere ([] :: [Filter Appointment])
-    
+    runDB $ deleteWhere ([] :: [Filter User])
+
     addPatients 1
     addPhysicians 1
 
     Just (Entity objId _ ) <- runDB $ selectFirst ([] :: [Filter Patient]) []
 
+    -- Test start
+
+    get $ AddAppointmentR objId
+    statusIs 303
+
+    withRestrictedUserLogin $ do
     get $ AddAppointmentR objId
     statusIs 200
     

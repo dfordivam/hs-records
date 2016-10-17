@@ -9,6 +9,7 @@
 -- App User configurable settings
 /settings SettingsR GET
 /settings/add_admin SettingsAddAdminR GET
+/settings/verify_user/#Text SettingsVerifyUserR GET
 
 --
 -- Physician
