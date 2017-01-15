@@ -1,6 +1,10 @@
 module Foundation where
 
+#ifdef USE_MONGODB
 import Database.Persist.MongoDB hiding (master)
+#else
+import Database.Persist.Sql (ConnectionPool, runSqlPool)
+#endif
 import Import.NoFoundation
 import Text.Hamlet                 (hamletFile)
 import Text.Jasmine                (minifym)
@@ -141,13 +145,21 @@ instance Yesod App where
 
 -- How to run database actions.
 instance YesodPersist App where
+#ifdef USE_MONGODB
     type YesodPersistBackend App = MongoContext
+#else
+    type YesodPersistBackend App = SqlBackend
+#endif
     runDB action = do
         master <- getYesod
+#ifdef USE_MONGODB
         runMongoDBPool
             (mgAccessMode $ appDatabaseConf $ appSettings master)
             action
             (appConnPool master)
+#else
+        runSqlPool action $ appConnPool master
+#endif
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.

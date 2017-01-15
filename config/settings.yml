@@ -24,12 +24,16 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # See https://github.com/yesodweb/yesod/wiki/Configuration#parsing-numeric-values-as-strings
 
 database:
-  user:        "hs-records"
-  password:    "hs-records"
-  host:        "localhost"
-  # See config/test-settings.yml for an override during tests
-  database:    "hs-records"
-  connections: 10
+  database: "_env:SQLITE_DATABASE:PROJECTNAME.sqlite3"
+  poolsize: "_env:SQLITE_POOLSIZE:10"
+
+  # Use below settings for MongoDB
+  #  user:        "hs-records"
+  #  password:    "hs-records"
+  #  host:        "localhost"
+  #  # See config/test-settings.yml for an override during tests
+  #  database:    "hs-records"
+  #  connections: 10
 
 copyright: Insert copyright statement here
 #analytics: UA-YOURCODE

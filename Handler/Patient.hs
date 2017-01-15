@@ -3,7 +3,6 @@ module Handler.Patient where
 import Import
 import CustomDBDataTypes
 import Handler.FormUtils
-import Database.Persist.MongoDB
 -- import System.Random
 -- import qualified Data.Vector as V
 

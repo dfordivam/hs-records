@@ -6,13 +6,17 @@
 -- declared in the Foundation.hs file.
 module Settings where
 
-import ClassyPrelude.Yesod
+import ClassyPrelude.Yesod hiding  (throw)
 import Control.Exception           (throw)
 import Data.Aeson                  (Result (..), fromJSON, withObject, (.!=),
                                     (.:?))
 import Data.FileEmbed              (embedFile)
 import Data.Yaml                   (decodeEither')
+#ifdef USE_MONGODB
 import Database.Persist.MongoDB    (MongoConf)
+#else
+import Database.Persist.Sqlite     (SqliteConf)
+#endif
 import Language.Haskell.TH.Syntax  (Exp, Name, Q)
 import Network.Wai.Handler.Warp    (HostPreference)
 import Yesod.Default.Config2       (applyEnvValue, configSettingsYml)
@@ -25,7 +29,11 @@ import Yesod.Default.Util          (WidgetFileSettings, widgetFileNoReload,
 data AppSettings = AppSettings
     { appStaticDir              :: String
     -- ^ Directory from which to serve static files.
+#ifdef USE_MONGODB
     , appDatabaseConf           :: MongoConf
+#else
+    , appDatabaseConf           :: SqliteConf
+#endif
     -- ^ Configuration settings for accessing the database.
     , appRoot                   :: Maybe Text
     -- ^ Base for all generated URLs. If @Nothing@, determined
