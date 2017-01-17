@@ -22,6 +22,19 @@ spec = withApp $ do
     followRedirect
 
   it "Should require admin login if admin is present" $ do
+    -- Init
+    get SettingsR
+    statusIs 200
+
+    get SettingsAddAdminR
+    statusIs 303
+    followRedirect
+
+    -- Redirect to login
+    statusIs 303
+    followRedirect
+
+    -- Test
     get SettingsR
     statusIs 303
     followRedirect

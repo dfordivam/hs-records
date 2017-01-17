@@ -1,2 +1,2 @@
 database:
-  database: hs-records_test
+  database: hs-records_test.sqlite3

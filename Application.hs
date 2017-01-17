@@ -1,3 +1,7 @@
+-- See https://ghc.haskell.org/trac/ghc/ticket/12130
+-- These two language pragmas has been added as a workaround for this issue.
+{-# LANGUAGE NoDisambiguateRecordFields #-}
+{-# LANGUAGE NoRecordWildCards #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Application
     ( getApplicationDev
@@ -13,8 +17,14 @@ module Application
     , db
     ) where
 
-import Control.Monad.Logger                 (liftLoc)
+import Control.Monad.Logger                 (liftLoc, runLoggingT)
+#ifdef USE_MONGODB
 import Database.Persist.MongoDB             (MongoContext)
+#else
+import Database.Persist.Sqlite              (createSqlitePool, runSqlPool,
+                                             sqlDatabase, sqlPoolSize)
+#endif
+
 import Import
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.Wai (Middleware)
@@ -58,11 +68,34 @@ makeFoundation appSettings = do
         (if appMutableStatic appSettings then staticDevel else static)
         (appStaticDir appSettings)
 
+#ifdef USE_MONGODB
     -- Create the database connection pool
     appConnPool <- createPoolConfig $ appDatabaseConf appSettings
 
     -- Return the foundation
-    return App {..}
+    return $ App appSettings appStatic appConnPool appHttpManager appLogger
+#else
+
+    -- We need a log function to create a connection pool. We need a connection
+    -- pool to create our foundation. And we need our foundation to get a
+    -- logging function. To get out of this loop, we initially create a
+    -- temporary foundation without a real connection pool, get a log function
+    -- from there, and then create the real foundation.
+    let mkFoundation appConnPool = App appSettings appStatic appConnPool appHttpManager appLogger
+        tempFoundation = mkFoundation $ error "connPool forced in tempFoundation"
+        logFunc = messageLoggerSource tempFoundation appLogger
+
+    -- Create the database connection pool
+    pool <- flip runLoggingT logFunc $ createSqlitePool
+        (sqlDatabase $ appDatabaseConf appSettings)
+        (sqlPoolSize $ appDatabaseConf appSettings)
+
+    -- Perform database migration using our application's logging settings.
+    runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
+
+    -- Return the foundation
+    return $ mkFoundation pool
+#endif
 
 -- | Convert our foundation to a WAI Application by calling @toWaiAppPlain@ and
 -- applying some additional middlewares.
@@ -163,5 +196,9 @@ handler :: Handler a -> IO a
 handler h = getAppSettings >>= makeFoundation >>= flip unsafeHandler h
 
 -- | Run DB queries
+#ifdef USE_MONGODB
 db :: ReaderT MongoContext (HandlerT App IO) a -> IO a
+#else
+db :: ReaderT SqlBackend (HandlerT App IO) a -> IO a
+#endif
 db = handler . runDB

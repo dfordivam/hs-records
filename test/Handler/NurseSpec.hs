@@ -69,6 +69,7 @@ spec = withApp $ do
     )
 
   it "edit the record" $ do
+    addNurses 25
     Just (Entity objId obj) <- runDB $ selectFirst ([] :: [Filter Nurse]) []
 
     withFullUserLogin ( do

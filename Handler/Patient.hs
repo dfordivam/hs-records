@@ -88,7 +88,7 @@ getPatientSearchR = do
 
   dbData <- case maybeName of
     Just name ->
-      runDB $ selectList ([PatientName =~. (name, "i")] :: [Filter Patient])
+      runDB $ selectList ([PatientName ==. name] :: [Filter Patient])
         [ Asc PatientName]
     Nothing -> pure []
 

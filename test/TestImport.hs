@@ -4,9 +4,8 @@ module TestImport
     ) where
 
 import Application              (makeFoundation, makeLogWare)
-import ClassyPrelude            as X
+import ClassyPrelude            as X hiding (Handler, delete, deleteBy)
 import Database.Persist         as X hiding (get)
-import Database.Persist.MongoDB hiding (master)
 import Foundation               as X
 import Model                    as X
 import Settings                 (appDatabaseConf)
@@ -15,6 +14,7 @@ import Yesod.Default.Config2    (ignoreEnv, loadAppSettings)
 import Yesod.Test               as X
 -- Wiping the test database
 #ifdef USE_MONGODB
+import Database.Persist.MongoDB hiding (master)
 import Database.MongoDB.Query (allCollections)
 import Database.MongoDB.Admin (dropCollection)
 import Control.Monad.Trans.Control (MonadBaseControl)
@@ -56,7 +56,7 @@ dropAllCollections = allCollections >>= return . filter (not . isSystemCollectio
 #else
 
 -- Wiping the database
-import Database.Persist.Sqlite              (sqlDatabase, wrapConnection, createSqlPool)
+import Database.Persist.Sqlite
 import qualified Database.Sqlite as Sqlite
 import Control.Monad.Logger                 (runLoggingT)
 import Yesod.Core (messageLoggerSource)
@@ -68,7 +68,7 @@ runDB query = do
 
 withApp :: SpecWith (TestApp App) -> Spec
 withApp = before $ do
-    settings <- loadYamlSettings
+    settings <- loadAppSettings
         ["config/test-settings.yml", "config/settings.yml"]
         []
         ignoreEnv

@@ -1,3 +1,7 @@
+-- See https://ghc.haskell.org/trac/ghc/ticket/12130
+-- These two language pragmas has been added as a workaround for this issue.
+{-# LANGUAGE NoDisambiguateRecordFields #-}
+{-# LANGUAGE NoRecordWildCards #-}
 module Handler.Home where
 
 import Import
