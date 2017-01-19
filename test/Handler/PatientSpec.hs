@@ -48,14 +48,12 @@ spec = withApp $ do
     bodyContains "Pat_10"
     bodyContains "Pat_20"
 
-    printBody
     bodyContains "Add new patient record"
 
     -- Check 2nd page
     get $ ListPatientPageR 2
     statusIs 200
 
-    printBody
     bodyContains "Pat_6"
     bodyContains "Pat_9"
 
