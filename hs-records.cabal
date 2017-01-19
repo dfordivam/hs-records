@@ -94,6 +94,7 @@ library
                  , case-insensitive
                  , wai
                  , yesod-auth-account
+                 , persistent-cdc
 
     if flag(mongodb)
         cpp-options:   -DUSE_MONGODB
@@ -122,6 +123,7 @@ test-suite test
                     Handler.PatientSpec
                     Handler.PhysicianSpec
                     Handler.SettingsSpec
+                    Handler.NurseSpec
                     TestImport
 
     extensions: TemplateHaskell
