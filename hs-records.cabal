@@ -160,6 +160,7 @@ test-suite test
                  , monad-control
                  , aeson
                  , yesod-auth-account
+                 , yesod-form
 
     if flag(mongodb)
       cpp-options:   -DUSE_MONGODB
