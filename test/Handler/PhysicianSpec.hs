@@ -80,9 +80,15 @@ spec = withApp $ do
         Just (Entity _ newObj) <- runDB $  selectFirst ([] :: [Filter Physician]) []
         --getBy $ objId
 
-        assertEqual "Name should be" (physicianName newObj) (newName)
-        assertEqual "Position should be" (physicianPosition newObj) (physicianPosition obj)
-        assertEqual ("Remarks should be " ++ (show $ physicianRemarks newObj)) (fmap unTextarea (physicianRemarks newObj)) (Just newRemarks)
+        assertEqual "Name" (physicianName newObj) (newName)
+        assertEqual "Position" (physicianPosition newObj) (physicianPosition obj)
+        assertEqual "Remarks" (fmap unTextarea (physicianRemarks newObj)) (Just newRemarks)
+
+        Just (Entity _ hist) <- runDB $  selectFirst ([] :: [Filter PhysicianHistory]) []
+        assertEqual "History" (objId) (physicianHistoryPhysician hist)
+        assertEqual "Name" (Just oldName) (physicianHistoryName hist)
+        assertEqual "Position" (Nothing) (physicianHistoryPosition hist)
+        assertEqual "Remarks" (oldRemarks, True) (physicianHistoryRemarks hist)
         )
 
       -- it "details page shows physician details, list of upcoming appointments\
