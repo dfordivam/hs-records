@@ -20,11 +20,11 @@
 /list/physicians/page/#Integer ListPhysicianPageR GET
 
 --
-/physician/#PhysicianId PhysicianR GET
-/physician/#PhysicianId/appointments PhysicianAppointmentsR GET
-/physician/#PhysicianId/admissions PhysicianAdmissionsR GET
+/physician/#ProfessionalId PhysicianR GET
+/physician/#ProfessionalId/appointments PhysicianAppointmentsR GET
+/physician/#ProfessionalId/admissions PhysicianAdmissionsR GET
 
-/edit/physician/#PhysicianId EditPhysicianR GET POST
+/edit/physician/#ProfessionalId EditPhysicianR GET POST
 
 -- Patient
 /add/patient AddPatientR GET POST
@@ -46,11 +46,11 @@
 /list/nurses ListNurseR GET
 /list/nurses/page/#Integer ListNursePageR GET
 
-/nurse/#NurseId NurseR GET
-/nurse/#NurseId/appointments NurseAppointmentsR GET
-/nurse/#NurseId/admissions NurseAdmissionsR GET
+/nurse/#ProfessionalId NurseR GET
+/nurse/#ProfessionalId/appointments NurseAppointmentsR GET
+/nurse/#ProfessionalId/admissions NurseAdmissionsR GET
 
-/edit/nurse/#NurseId EditNurseR GET POST
+/edit/nurse/#ProfessionalId EditNurseR GET POST
 
 -- Appointment
 /add/appointment/#PatientId AddAppointmentR GET POST

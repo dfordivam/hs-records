@@ -5,6 +5,11 @@ module CustomDBDataTypes where
 import ClassyPrelude.Yesod
 import Database.Persist.TH()
 
+data RoleType = Physician | Nurse
+  deriving (Show, Read, Eq, Enum, Bounded)
+
+derivePersistField "RoleType"
+
 data Gender = Female | Male
   deriving (Show, Read, Eq, Enum, Bounded)
 

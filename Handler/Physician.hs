@@ -2,15 +2,8 @@
 module Handler.Physician where
 
 import Import
+import CustomDBDataTypes
 import Handler.FormUtils
-
-physicianForm :: Maybe Physician -> Form Physician
-physicianForm inp = renderDivs $ Physician
-  <$> areq textField "Name" (physicianName <$> inp)
-  <*> areq (selectField optionsEnum) "Gender" (physicianGender <$> inp)
-  <*> areq textField "Position" (physicianPosition <$> inp)
-  <*> aopt textareaField "Remarks" (physicianRemarks <$> inp)
-  <*> areq (selectField optionsEnum) "Active" (physicianActive <$> inp)
 
 getAddPhysicianR :: Handler Html
 getAddPhysicianR = getAddRecordForm (physicianForm Nothing) AddPhysicianR
@@ -26,8 +19,8 @@ getListPhysicianR = redirect $ ListPhysicianPageR 1
 
 getListPhysicianPageR :: Integer -> Handler Html
 getListPhysicianPageR pageNumber = do
-  dbData <- runDB $ selectList ([] :: [Filter Physician])
-    [ Asc PhysicianName
+  dbData <- runDB $ selectList ([ProfessionalRole ==. Physician] :: [Filter Professional])
+    [ Asc ProfessionalName
     , LimitTo perPage
     , OffsetBy $ ((fromIntegral pageNumber) - 1) * perPage]
 
@@ -35,7 +28,7 @@ getListPhysicianPageR pageNumber = do
     [whamlet|
       <ul>
         $forall Entity physId physician <- dbData
-          <li>#{physicianName physician}
+          <li>#{professionalName physician}
           <li>
             <a href=@{EditPhysicianR physId}>edit
       <div>
@@ -43,18 +36,18 @@ getListPhysicianPageR pageNumber = do
           <a href=@{AddPhysicianR}>Add new physician
     |]
 
-getEditPhysicianR :: PhysicianId -> Handler Html
+getEditPhysicianR :: ProfessionalId -> Handler Html
 getEditPhysicianR idVal = do
   val <- runDB $ get $ idVal
   getAddRecordForm (physicianForm val) (EditPhysicianR idVal)
 
-postEditPhysicianR :: PhysicianId -> Handler Html
+postEditPhysicianR :: ProfessionalId -> Handler Html
 postEditPhysicianR idVal =
   postAddRecordForm (Just idVal) (physicianForm Nothing) (EditPhysicianR idVal)
 
-getPhysicianR :: PhysicianId -> Handler Html
-getPhysicianAppointmentsR :: PhysicianId -> Handler Html
-getPhysicianAdmissionsR :: PhysicianId -> Handler Html
+getPhysicianR :: ProfessionalId -> Handler Html
+getPhysicianAppointmentsR :: ProfessionalId -> Handler Html
+getPhysicianAdmissionsR :: ProfessionalId -> Handler Html
 
 getPhysicianR = undefined
 getPhysicianAppointmentsR = undefined

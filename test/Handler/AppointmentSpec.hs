@@ -6,6 +6,7 @@ import Handler.TestUtils
 
 spec :: Spec
 spec = withApp $ do
+  describe "Appointment" $ do
   it "loads a form to add a new appointment" $ do
     -- Init
     runDB $ deleteWhere ([] :: [Filter Appointment])

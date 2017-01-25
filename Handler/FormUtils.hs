@@ -3,6 +3,7 @@
 module Handler.FormUtils where
 
 import Import
+import CustomDBDataTypes
 import Database.Persist.CDC
 
 getAddRecordForm form addRoute = do
@@ -39,3 +40,18 @@ postAddRecordForm maybeId form addRoute = do
           ^{widget}
           <button>Submit
         |]
+
+physicianForm :: Maybe Professional -> Form Professional
+physicianForm = commonProfessionalForm Physician
+
+nurseForm :: Maybe Professional -> Form Professional
+nurseForm = commonProfessionalForm Nurse
+
+commonProfessionalForm role inp = renderDivs $ Professional
+  <$> areq textField "Name" (professionalName <$> inp)
+  <*> areq (selectField optionsEnum) "Gender" (professionalGender <$> inp)
+  <*> areq textField "Position" (professionalPosition <$> inp)
+  <*> aopt textareaField "Remarks" (professionalRemarks <$> inp)
+  <*> areq (selectField optionsEnum) "Active" (professionalActive <$> inp)
+  <*> pure role
+

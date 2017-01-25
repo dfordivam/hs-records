@@ -10,21 +10,13 @@ User
     authLevel AuthorisationLevel
     deriving Typeable
 
-Physician
+Professional
     name Text
     gender Gender
     position Text
     remarks Textarea Maybe
     active Bool
-    deriving Eq
-    deriving Show
-
-Nurse
-    name Text
-    gender Gender
-    position Text Maybe
-    remarks Textarea Maybe
-    active Bool
+    role RoleType
     deriving Eq
     deriving Show
 
@@ -39,50 +31,23 @@ Patient
     deriving Eq
     deriving Show
 
+Encounter
+    patient PatientId
+    author ProfessionalId 
+    diagnosis Textarea
+    comments Textarea
+    time UTCTime
+    deriving Eq
+    deriving Show
+
 Appointment
     patient PatientId
-    physician PhysicianId
-    nurse NurseId Maybe
+    physician ProfessionalId
+    nurse ProfessionalId Maybe
     diagnosis Textarea
     comments Textarea
     startTime UTCTime
     endTime UTCTime Maybe
-    deriving Eq
-    deriving Show
-
-Procedure
-    name Text
-    remarks Textarea Maybe
-    cost Int
-    deriving Eq
-    deriving Show
-
-Admission
-    patient PatientId
-    active Bool
-    startTime UTCTime
-    endTime UTCTime Maybe
-    nurse NurseId
-    physician PhysicianId
-    room RoomId
-    procedures [Procedure]
-    diagnosis Textarea
-    comments Textarea
-    deriving Eq
-    deriving Show
-
-Room
-    name Text
-    available Bool
-    beds Int
-    remarks Textarea Maybe
-    deriving Eq
-    deriving Show
-
-PaymentDetails
-    patient PatientId
-    amount Int
-    time UTCTime
     deriving Eq
     deriving Show
 

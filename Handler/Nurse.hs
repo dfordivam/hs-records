@@ -4,14 +4,6 @@ import Import
 import CustomDBDataTypes
 import Handler.FormUtils
 
-nurseForm :: Maybe Nurse -> Form Nurse
-nurseForm inp = renderDivs $ Nurse
-  <$> areq textField "Name" (nurseName <$> inp)
-  <*> areq (selectField optionsEnum) "Gender" (Just Female)
-  <*> aopt textField "Position" (nursePosition <$> inp)
-  <*> aopt textareaField "Remarks" (nurseRemarks <$> inp)
-  <*> areq (selectField optionsEnum) "Active" (nurseActive <$> inp)
-
 getAddNurseR :: Handler Html
 getAddNurseR = getAddRecordForm (nurseForm Nothing) AddNurseR
 
@@ -25,8 +17,8 @@ getListNurseR = redirect $ ListNursePageR 1
 
 getListNursePageR :: Integer -> Handler Html
 getListNursePageR pageNumber = do
-  dbData <- runDB $ selectList ([] :: [Filter Nurse])
-    [ Asc NurseName
+  dbData <- runDB $ selectList ([ProfessionalRole ==. Nurse] :: [Filter Professional])
+    [ Asc ProfessionalName
     , LimitTo perPage
     , OffsetBy $ ((fromIntegral pageNumber) - 1) * perPage]
 
@@ -34,24 +26,24 @@ getListNursePageR pageNumber = do
     [whamlet|
       <ul>
         $forall Entity objId objData <- dbData
-          <li>#{nurseName objData}
+          <li>#{professionalName objData}
       <div>
         <p>
           <a href=@{AddNurseR}>Add new nurse record
     |]
 
-getEditNurseR :: NurseId -> Handler Html
+getEditNurseR :: ProfessionalId -> Handler Html
 getEditNurseR idVal = do
   val <- runDB $ get $ idVal
   getAddRecordForm (nurseForm val) (EditNurseR idVal)
 
-postEditNurseR :: NurseId -> Handler Html
+postEditNurseR :: ProfessionalId -> Handler Html
 postEditNurseR idVal =
   postAddRecordForm (Just idVal) (nurseForm Nothing) (EditNurseR idVal)
 
-getNurseR :: NurseId -> Handler Html
-getNurseAppointmentsR :: NurseId -> Handler Html
-getNurseAdmissionsR :: NurseId -> Handler Html
+getNurseR :: ProfessionalId -> Handler Html
+getNurseAppointmentsR :: ProfessionalId -> Handler Html
+getNurseAdmissionsR :: ProfessionalId -> Handler Html
 
 getNurseR = undefined
 getNurseAppointmentsR = undefined

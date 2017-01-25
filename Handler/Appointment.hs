@@ -8,7 +8,7 @@ appointmentStartTimeFormTag :: Text
 appointmentStartTimeFormTag = "appointmentStartTimeFormTag"
 
 appointmentForm :: Maybe Appointment ->
-  PatientId -> [(Text, PhysicianId)] -> [(Text, NurseId)] -> UTCTime
+  PatientId -> [(Text, ProfessionalId)] -> [(Text, ProfessionalId)] -> UTCTime
   -> Form Appointment
 appointmentForm inp patId physicianList nurseList startTime =
   renderDivs $ Appointment
@@ -29,16 +29,16 @@ appointmentForm inp patId physicianList nurseList startTime =
 
 getAddAppointmentR :: PatientId -> Handler Html
 getAddAppointmentR patId = do
-  physList <- runDB $ selectList ([] :: [Filter Physician]) 
-    [Asc PhysicianName]
-  nurseList <- runDB $ selectList ([] :: [Filter Nurse])
-    [Asc NurseName]
+  physList <- runDB $ selectList ([ProfessionalRole ==. Physician] :: [Filter Professional]) 
+    [Asc ProfessionalName]
+  nurseList <- runDB $ selectList ([ProfessionalRole ==. Nurse] :: [Filter Professional])
+    [Asc ProfessionalName]
 
   curTime <- lift (liftIO getCurrentTime)
   let physNameList = map 
-        (\(Entity objId obj) -> (physicianName obj, objId)) physList
+        (\(Entity objId obj) -> (professionalName obj, objId)) physList
       nurseNameList = map
-        (\(Entity objId obj) -> (nurseName obj, objId)) nurseList 
+        (\(Entity objId obj) -> (professionalName obj, objId)) nurseList 
 
   -- Generate the form to be displayed
   (widget, enctype) <- generateFormPost
@@ -60,15 +60,16 @@ postAddAppointmentR patId = do
         join (parseTime defaultTimeLocale "%FT%R" <$>
           (unpack <$> stime))
 
-  physList <- runDB $ selectList ([] :: [Filter Physician]) 
-    [Asc PhysicianName]
-  nurseList <- runDB $ selectList ([] :: [Filter Nurse])
-    [Asc NurseName]
+  physList <- runDB $ selectList ([ProfessionalRole ==. Physician] :: [Filter Professional]) 
+    [Asc ProfessionalName]
+  nurseList <- runDB $ selectList ([ProfessionalRole ==. Nurse] :: [Filter Professional])
+    [Asc ProfessionalName]
 
+  curTime <- lift (liftIO getCurrentTime)
   let physNameList = map 
-        (\(Entity objId obj) -> (physicianName obj, objId)) physList
+        (\(Entity objId obj) -> (professionalName obj, objId)) physList
       nurseNameList = map
-        (\(Entity objId obj) -> (nurseName obj, objId)) nurseList 
+        (\(Entity objId obj) -> (professionalName obj, objId)) nurseList 
 
   postAddRecordForm Nothing 
     (appointmentForm Nothing patId physNameList nurseNameList startTime)
